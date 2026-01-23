@@ -4,8 +4,8 @@ from home_page import get_qualifying_results
 # Define the router
 router = APIRouter()
 
-@router.get("/qualifying_results/{year}/{gp}")
-async def fetch_drivers(year: int, gp: str):
+@router.get("/session_results/{year}/{gp}")
+async def fetch_qualifying_results(year: int, gp: str):
     try:
         data = get_qualifying_results(year, gp)
         return data

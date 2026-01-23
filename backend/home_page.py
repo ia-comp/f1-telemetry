@@ -2,6 +2,14 @@ import pandas as pd
 import fastf1
 from fastf1.core import Laps
 
+# This function converts a driver's fastest lap into a string with format
+#  min:sec:ms eg. '01:12.345'
+def format_laptime(td):
+    if pd.notna(td):
+        secs = td.total_seconds()
+        return f"{int(secs // 60)}:{int(secs % 60):02d}.{int((secs % 1) * 1000):03d}"
+    return None
+
 def get_qualifying_results(year: int, gp: str):
     # load a session and its telemetry data
     session = fastf1.get_session(year, gp, 'Q')
@@ -27,7 +35,7 @@ def get_qualifying_results(year: int, gp: str):
     df = fastest_laps[['Driver', 'LapTime', 'LapTimeDelta']].copy()
     
     # Convert Timedelta to total seconds (float) so JSON can handle it
-    df['LapTime'] = df['LapTime'].dt.total_seconds() 
+    df['LapTime'] = df['LapTime'].apply(format_laptime)
     df['LapTimeDelta'] = df['LapTimeDelta'].dt.total_seconds()
     
     return df.to_dict('records')

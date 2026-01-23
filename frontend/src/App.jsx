@@ -1,6 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router'
 import HomePage from './pages/HomePage'
+import SessionResults from './pages/SessionResults'
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
     justfiy-center p-4 overflow-hidden">
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/session_results" element={<SessionResults />} />
       </Routes>
     </div>
 
