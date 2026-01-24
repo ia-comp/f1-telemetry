@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from home_page import get_qualifying_results
+from home_page import get_qualifying_results, get_year_schedule
 
 # Define the router
 router = APIRouter()
@@ -8,6 +8,15 @@ router = APIRouter()
 async def fetch_qualifying_results(year: int, gp: str):
     try:
         data = get_qualifying_results(year, gp)
+        return data
+    except Exception as e:
+        # If FastF1 fails (e.g., wrong GP name), return a 400 error
+        raise HTTPException(status_code=400, detail=str(e))
+    
+@router.get("/session_results/{year}")
+async def fetch_year_schedule(year: int):
+    try:
+        data = get_year_schedule(year)
         return data
     except Exception as e:
         # If FastF1 fails (e.g., wrong GP name), return a 400 error
