@@ -5,8 +5,7 @@ import SessionResults from './pages/SessionResults'
 
 function App() {
   return (
-    <div className="min-h-screen bg-slate-800 relative flex items-center 
-    justfiy-center p-4 overflow-hidden">
+    <div className="bg-neutral-900 min-w-lg">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/session_results" element={<SessionResults />} />
