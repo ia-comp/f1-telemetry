@@ -1,6 +1,9 @@
+import os
+from pathlib import Path
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 import fastf1
-import os
+
 
 class Settings(BaseSettings):
     PORT: int
@@ -8,7 +11,7 @@ class Settings(BaseSettings):
     EARLIEST_YEAR: int
     LATEST_YEAR: int
 
-    model_config = SettingsConfigDict(env_file=".env")
+    model_config = SettingsConfigDict(env_file=Path(__file__).parent / ".env")
 
 settings = Settings()
 

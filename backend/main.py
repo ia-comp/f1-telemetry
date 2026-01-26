@@ -1,9 +1,9 @@
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
-from config import settings, setup_f1
 from functools import lru_cache
 
-from routes.session_results import router as session_router
+from backend.config import settings, setup_f1
+from backend.routes.session_results import router as session_router
 # Initialize FastF1 Cache
 # This must happen before the app starts so all routes have access to it
 setup_f1()
@@ -25,7 +25,6 @@ app.add_middleware(
 )
 
 # 3. Include Routers
-# This tells FastAPI to use the paths defined in your routes.py file
 app.include_router(session_router, prefix="/api")
 
 # 4. Root Endpoint
