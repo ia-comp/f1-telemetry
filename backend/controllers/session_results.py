@@ -2,6 +2,8 @@ import pandas as pd
 import fastf1
 from fastf1.core import Laps
 
+EARLIEST_YEAR = 2018
+LATEST_YEAR = 2025
 # This function converts a driver's fastest lap into a string with format
 #  min:sec:ms eg. '1:12.345'
 def format_laptime(td):
@@ -25,8 +27,20 @@ def get_year_schedule(year: int):
  
 def get_qualifying_results(year: int, gp: str):
     # load a session and its telemetry data
+    schedule = fastf1.get_event_schedule(year)
+
+    season_events = set()
+    for event in schedule.itertuples():
+        season_events.add(event.EventName.lower())
+
+    if (gp not in season_events):
+        raise Exception("Invalid event selected")
+     
     session = fastf1.get_session(year, gp, 'Q')
-    session.load(telemetry=False, weather=False)
+    if (not session):
+        raise Exception("Invalid event selected")
+    
+    session.load(telemetry=False, weather=False, messages=False)
     drivers = pd.unique(session.laps['Driver'])
 
     # # get drivers fastest laps
@@ -54,3 +68,5 @@ def get_qualifying_results(year: int, gp: str):
     
     return df.to_dict('records')
 
+def plot_speed_trace(year: int, gp: int, driver: str):
+    pass

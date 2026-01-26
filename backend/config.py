@@ -5,6 +5,8 @@ import os
 class Settings(BaseSettings):
     PORT: int
     CLIENT_URL: str
+    EARLIEST_YEAR: int
+    LATEST_YEAR: int
 
     model_config = SettingsConfigDict(env_file=".env")
 
