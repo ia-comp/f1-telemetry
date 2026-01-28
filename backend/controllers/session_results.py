@@ -38,7 +38,7 @@ def get_qualifying_results(year: int, gp: str):
      
     session = fastf1.get_session(year, gp, 'Q')
     if (not session):
-        raise Exception("Invalid event selected")
+        raise Exception("Get session results - Internal server error")
     
     session.load(telemetry=False, weather=False, messages=False)
     drivers = pd.unique(session.laps['Driver'])
@@ -69,4 +69,33 @@ def get_qualifying_results(year: int, gp: str):
     return df.to_dict('records')
 
 def plot_speed_trace(year: int, gp: int, driver: str):
-    pass
+    # # get drivers fastest laps
+    # load a session and its telemetry data
+    schedule = fastf1.get_event_schedule(year)
+
+    season_events = set()
+    for event in schedule.itertuples():
+        season_events.add(event.EventName.lower())
+
+    if (gp not in season_events):
+        raise Exception("Invalid event selected")
+     
+    session = fastf1.get_session(year, gp, 'Q')
+    if (not session):
+        raise Exception("Get speed trace - Internal server error")
+    
+    session.load(weather=False, messages=False)
+    fastest_lap = session.laps.pick_drivers(driver).pick_fastest()
+
+    car_data = fastest_lap.get_car_data().add_distance()
+    circuit_info = session.get_circuit_info()
+
+    # df = car_data[['Distance', 'Speed']].copy()
+    
+    # Remove rows with missing data
+    car_data = car_data.dropna()  
+    return {
+        "distance": car_data['Distance'].tolist(),
+        "speed": car_data['Speed'].tolist()
+    }
+    return df.to_dict('records')

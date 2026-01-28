@@ -5,14 +5,21 @@ from backend.exceptions import validate_year
 # Define the router
 router = APIRouter()
 
-# @router.get("/session_results/speed_trace/{year}/{gp}/{driver}")
-# async def fetch_driver_speed_trace(year: int, gp: str, driver: str):
-#     try:
-#         data = get_qualifying_results(year, gp)
-#         return data
-#     except Exception as e:
-#         # If FastF1 fails (e.g., wrong GP name), return a 400 error
-#         raise HTTPException(status_code=400, detail=str(e))
+@router.get("/session_results/speed_trace/{year}/{gp}/{driver}")
+async def fetch_driver_speed_trace(year: int, gp: str, driver: str):
+    validate_year(year)
+
+    if (not gp):
+        raise HTTPException(status_code=400, detail="Must select an event to load speed trace")
+    
+    if (not driver):
+        raise HTTPException(status_code=400, detail="Must select a driver to load speed trace")
+    try:
+        data = plot_speed_trace(year, gp, driver)
+        return data
+    except Exception as e:
+        # If FastF1 fails (e.g., wrong GP name), return a 400 error
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.get("/session_results/{year}/{gp}")
 async def fetch_qualifying_results(year: int, gp: str):
