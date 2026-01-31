@@ -5,7 +5,7 @@ from backend.exceptions import validate_year
 # Define the router
 router = APIRouter()
 
-@router.get("/session_results/speed_trace/{year}/{gp}/{driver}")
+@router.get("/session_results/telemetry/speed_trace/{year}/{gp}/{driver}")
 async def fetch_driver_speed_trace(year: int, gp: str, driver: str):
     validate_year(year)
 

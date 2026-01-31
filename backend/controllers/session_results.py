@@ -1,6 +1,8 @@
 import pandas as pd
+
 import fastf1
 from fastf1.core import Laps
+import fastf1.plotting
 
 EARLIEST_YEAR = 2018
 LATEST_YEAR = 2025
@@ -89,13 +91,14 @@ def plot_speed_trace(year: int, gp: int, driver: str):
 
     car_data = fastest_lap.get_car_data().add_distance()
     circuit_info = session.get_circuit_info()
-
-    # df = car_data[['Distance', 'Speed']].copy()
     
     # Remove rows with missing data
     car_data = car_data.dropna()  
+    team_color = fastf1.plotting.get_team_color(fastest_lap['Team'],
+                                            session=session)
     return {
+        "colour": team_color,
         "distance": car_data['Distance'].tolist(),
-        "speed": car_data['Speed'].tolist()
+        "speed": car_data['Speed'].tolist(),
     }
     return df.to_dict('records')

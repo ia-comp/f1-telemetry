@@ -6,11 +6,11 @@ import SpeedTrace from './pages/SpeedTrace'
 
 function App() {
   return (
-    <div className="bg-neutral-900 min-w-lg">
+    <div>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/session_results" element={<SessionResults />} />
-        <Route path="/session_results/speed_trace" element={<SpeedTrace />} />
+        <Route path="/session_results/telemetry" element={<SpeedTrace />} />
       </Routes>
     </div>
 
