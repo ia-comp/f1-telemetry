@@ -1,11 +1,12 @@
 import pandas as pd
+import numpy as np
 
 import fastf1
 from fastf1.core import Laps
 import fastf1.plotting
 
-EARLIEST_YEAR = 2018
-LATEST_YEAR = 2025
+from backend.helpers import get_session
+
 # This function converts a driver's fastest lap into a string with format
 #  min:sec:ms eg. '1:12.345'
 def format_laptime(td):
@@ -23,26 +24,14 @@ def get_year_schedule(year: int):
     for event in schedule.itertuples():
         list_races.append({
             "round": int(event.RoundNumber),
-            "name": event.EventName,
+            "name": event.EventName.removesuffix(" Grand Prix"),
         }) 
     return list_races
  
 def get_qualifying_results(year: int, gp: str):
-    # load a session and its telemetry data
-    schedule = fastf1.get_event_schedule(year)
+    session = get_session(year, gp, session_type="Q")
+    session.load(weather=False, messages=False)
 
-    season_events = set()
-    for event in schedule.itertuples():
-        season_events.add(event.EventName.lower())
-
-    if (gp not in season_events):
-        raise Exception("Invalid event selected")
-     
-    session = fastf1.get_session(year, gp, 'Q')
-    if (not session):
-        raise Exception("Get session results - Internal server error")
-    
-    session.load(telemetry=False, weather=False, messages=False)
     drivers = pd.unique(session.laps['Driver'])
 
     # # get drivers fastest laps
@@ -70,27 +59,13 @@ def get_qualifying_results(year: int, gp: str):
     
     return df.to_dict('records')
 
+# The functions below are used to display telemetry information
 def plot_speed_trace(year: int, gp: int, driver: str):
-    # # get drivers fastest laps
-    # load a session and its telemetry data
-    schedule = fastf1.get_event_schedule(year)
-
-    season_events = set()
-    for event in schedule.itertuples():
-        season_events.add(event.EventName.lower())
-
-    if (gp not in season_events):
-        raise Exception("Invalid event selected")
-     
-    session = fastf1.get_session(year, gp, 'Q')
-    if (not session):
-        raise Exception("Get speed trace - Internal server error")
-    
+    session = get_session(year, gp, session_type="Q")
     session.load(weather=False, messages=False)
     fastest_lap = session.laps.pick_drivers(driver).pick_fastest()
 
     car_data = fastest_lap.get_car_data().add_distance()
-    circuit_info = session.get_circuit_info()
     
     # Remove rows with missing data
     car_data = car_data.dropna()  
@@ -101,4 +76,3 @@ def plot_speed_trace(year: int, gp: int, driver: str):
         "distance": car_data['Distance'].tolist(),
         "speed": car_data['Speed'].tolist(),
     }
-    return df.to_dict('records')

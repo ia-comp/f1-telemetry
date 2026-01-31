@@ -97,7 +97,7 @@ function SessionResults() {
           <option disabled={true}>Select event</option>
             {yearSchedule.map((event) => (
               <option key={event.name} value={event.name}>
-                {event.round} - {event.name}
+                {event.round} - {event.name} Grand Prix
               </option>
             ))}
         </select>

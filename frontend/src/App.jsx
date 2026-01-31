@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router'
 import HomePage from './pages/HomePage'
 import SessionResults from './pages/SessionResults'
-import SpeedTrace from './pages/SpeedTrace'
+import Telemetry from './pages/Telemetry'
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/session_results" element={<SessionResults />} />
-        <Route path="/session_results/telemetry" element={<SpeedTrace />} />
+        <Route path="/session_results/telemetry" element={<Telemetry />} />
       </Routes>
     </div>
 

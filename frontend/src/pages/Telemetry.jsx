@@ -3,7 +3,7 @@ import Plot from 'react-plotly.js';
 import { useState, useEffect } from 'react';
 const API_URL = 'http://localhost:8000/api';
 
-function SpeedTrace() {
+function Telemetry() {
     // const [year, setYear] = useState(2025);
     // const [gp, setGP] = useState("");
 
@@ -15,7 +15,7 @@ function SpeedTrace() {
 
   const driver = "HAM";
   const year = 2023;
-  const gp = "japanese grand prix"
+  const gp = "Japanese"
   
   const plotSpeedTrace = async () => {
     // setYear(selectedYear)
@@ -71,7 +71,10 @@ function SpeedTrace() {
           <h2 className="text-4xl font-bold text-gray-50 mb-8 text-center drop-shadow-[0px_0px_7px] drop-shadow-[#a0690ae6]">
             Telemetry
           </h2>          
-          {speedTraceData && <Plot className="          drop-shadow-[0px_0px_7px] 
+          {!speedTraceData ? 
+            <p  className="text-gray-50 mb-8 text-center drop-shadow-[0px_0px_7px] drop-shadow-[#a0690ae6]">Loading...</p> : 
+          
+          <Plot className="drop-shadow-[0px_0px_7px] 
           drop-shadow-neutral-500 
           rounded-lg"
             data={[
@@ -86,7 +89,10 @@ function SpeedTrace() {
                 }
               },
             ]}
-            layout={{          
+            layout={{
+              title: {
+                text: "Speed Trace"
+              },          
               xaxis: {
                 title: {
                   text: "Distance (m)"
@@ -118,4 +124,4 @@ function SpeedTrace() {
   )
 }
 
-export default SpeedTrace
+export default Telemetry
