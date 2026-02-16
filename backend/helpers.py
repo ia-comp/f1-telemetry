@@ -7,10 +7,7 @@ def get_session(year: int, gp: str, session_type: str) -> Session:
     season_events = set()
     for event in schedule.itertuples():
         season_events.add(event.EventName.removesuffix(" Grand Prix"))
-
-
-    print(season_events)
-    print("My gp", gp)
+        
     if (gp not in season_events):
         raise Exception("Invalid event selected")
      

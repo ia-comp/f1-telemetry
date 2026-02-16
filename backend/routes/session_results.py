@@ -1,4 +1,6 @@
 from fastapi import HTTPException, APIRouter
+from fastapi.responses import StreamingResponse
+
 from backend.controllers.session_results import *
 from backend.exceptions import validate_year
 

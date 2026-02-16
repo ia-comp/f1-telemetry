@@ -30,11 +30,20 @@ def get_year_schedule(year: int):
  
 def get_qualifying_results(year: int, gp: str):
     session = get_session(year, gp, session_type="Q")
-    session.load(weather=False, messages=False)
+
+    print("HELLO WE GOT OUR SESSION")
+
+
+    session.load(telemetry=False, weather=False, messages=False)
+    # session._load_laps_data(livedata=None)
+
+    
+    print("LOADEDDDDDD SESSION")
 
     drivers = pd.unique(session.laps['Driver'])
 
-    # # get drivers fastest laps
+
+    # get drivers fastest laps
     list_fastest_laps = list()
     for drv in drivers:
         drvs_fastest_lap = session.laps.pick_drivers(drv).pick_fastest()
