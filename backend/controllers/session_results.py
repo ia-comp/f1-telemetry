@@ -27,31 +27,26 @@ def get_year_schedule(year: int):
             "name": event.EventName.removesuffix(" Grand Prix"),
         }) 
     return list_races
- 
+
 def get_qualifying_results(year: int, gp: str):
     session = get_session(year, gp, session_type="Q")
-    session.load(telemetry=False, weather=False, messages=False)
+    session.load(laps=False, telemetry=False, weather=False, messages=False)
 
-    drivers = pd.unique(session.laps['Driver'])
+    # get the fastest lap for each driver
+    fastest_laps = session.results.sort_values('Position')    
+    fastest_laps['LapTime'] = fastest_laps.apply(
+        lambda row: row['Q3'] if pd.notna(row['Q3']) 
+                    else (row['Q2'] if pd.notna(row['Q2']) else row['Q1']),
+        axis=1
+    )
 
-    # get drivers fastest laps
-    list_fastest_laps = list()
-    for drv in drivers:
-        drvs_fastest_lap = session.laps.pick_drivers(drv).pick_fastest()
-        list_fastest_laps.append(drvs_fastest_lap)
+    # calculate time delta
+    pole_lap = fastest_laps['Q3'].min()
+    fastest_laps['LapTimeDelta'] = fastest_laps['LapTime'] - pole_lap
+
+    df = fastest_laps[['Abbreviation', 'LapTime', 'LapTimeDelta']].copy()
     
-    fastest_laps = Laps(list_fastest_laps) \
-        .sort_values(by='LapTime') \
-        .reset_index(drop=True)
-
-    # display laptime delta to pole
-    pole_lap = fastest_laps.pick_fastest()
-    fastest_laps['LapTimeDelta'] = fastest_laps['LapTime'] - pole_lap['LapTime']
-
-    # React cannot read Python Timedelta objects. 
-    # This converts them to '0 days 00:01:12.345' format or simple strings.
-    df = fastest_laps[['Driver', 'LapTime', 'LapTimeDelta']].copy()
-    
+    df.columns = ['Driver', 'LapTime', 'LapTimeDelta']
     df['LapTime'] = df['LapTime'].apply(format_laptime)
     
     # Convert Timedelta to total seconds (float) so JSON can handle it
