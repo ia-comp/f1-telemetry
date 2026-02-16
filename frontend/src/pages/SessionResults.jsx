@@ -19,6 +19,7 @@ function SessionResults() {
     const availableYears = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018];
 
     const handleYearChange = async (selectedYear) => {
+      setGP("");
       setYear(selectedYear);
       setLoading(true);
       setError(null);
