@@ -55,19 +55,42 @@ def get_qualifying_results(year: int, gp: str):
     return df.to_dict('records')
 
 # The functions below are used to display telemetry information
-def plot_speed_trace(year: int, gp: int, driver: str):
+def plot_speed_trace(year: int, gp: str, driver: str):
+    session = get_session(year, gp, session_type="Q")
+    session.load(weather=False, messages=False)
+    
+    fastest_lap = session.laps.pick_driver(driver).pick_fastest()  # Singular
+    
+    # Get telemetry (combines car_data and pos_data)
+    telemetry = fastest_lap.get_telemetry()
+    
+    # Remove rows with missing data
+    telemetry = telemetry.dropna(subset=['Speed', 'Throttle', 'X', 'Y'])
+    
+    team_color = fastf1.plotting.get_team_color(
+        fastest_lap['Team'], 
+        session=session
+    )
+    
+    return {
+        "colour": team_color,
+        "distance": telemetry['Distance'].tolist(),
+        "speed": telemetry['Speed'].tolist(),
+        "throttle": telemetry['Throttle'].tolist(),
+        "x": telemetry['X'].tolist(),
+        "y": telemetry['Y'].tolist(),
+        "z": telemetry['Z'].tolist() if 'Z' in telemetry.columns else None
+    }
+
+def circuit_map(year: int, gp: int, driver: str):
     session = get_session(year, gp, session_type="Q")
     session.load(weather=False, messages=False)
     fastest_lap = session.laps.pick_drivers(driver).pick_fastest()
 
-    car_data = fastest_lap.get_car_data().add_distance()
+    pos = fastest_lap.get_pos_data()
     
-    # Remove rows with missing data
-    car_data = car_data.dropna()  
-    team_color = fastf1.plotting.get_team_color(fastest_lap['Team'],
-                                            session=session)
     return {
-        "colour": team_color,
-        "distance": car_data['Distance'].tolist(),
-        "speed": car_data['Speed'].tolist(),
-    }
+        "X": pos['X'].tolist(),
+        "Y": pos['Y'].tolist(),
+        "Z": pos['Z'].tolist() if 'Z' in pos.columns else None
+    } 
