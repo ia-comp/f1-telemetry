@@ -1,6 +1,8 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
 import { useState, useEffect } from 'react';
+import SpeedTrace from './SpeedTrace';
+
 const API_URL = 'http://localhost:8000/api';
 
 function Telemetry() {
@@ -95,49 +97,9 @@ function Telemetry() {
             Telemetry
           </h2>          
           {!speedTraceData ? 
-            <p  className="text-gray-50 mb-8 text-center drop-shadow-[0px_0px_7px] drop-shadow-[#a0690ae6]">Loading...</p> : 
-          
-          <Plot className="drop-shadow-[0px_0px_7px] 
-          drop-shadow-neutral-500 
-          rounded-lg"
-            data={[
-              {
-                x: speedTraceData.distance,
-                y: speedTraceData.speed,            
-                mode: "lines",
-                name: driver,
-                line: {
-                  color: speedTraceData.colour,
-                  width: 3
-                }
-              },
-            ]}
-            layout={{
-              title: {
-                text: "Speed Trace"
-              },          
-              xaxis: {
-                title: {
-                  text: "Distance (m)"
-                },
-                showgrid: false,
-                zeroline: true,
-                showline: true
-              },
-              yaxis: {
-                title: {
-                  text: "Speed (km/h)"
-                },
-                showline: true
-              },
-              font: {
-                color: "#FFFFFF"
-              },
-              showlegend: true,
-              plot_bgcolor: "#262626",
-              paper_bgcolor: "#262626"
-            }}
-          />}
+            <p  className="text-gray-50 mb-8 text-center drop-shadow-[0px_0px_7px] drop-shadow-[#a0690ae6]">Loading...</p> :
+            <SpeedTrace speedTraceData={speedTraceData} driver={driver}></SpeedTrace>
+          }
 
           {/* Throttle % Graph*/}
           {!speedTraceData ? 
@@ -186,9 +148,6 @@ function Telemetry() {
           />}
         </div>      
       </div>
-
-
-
     </div>
   )
 }
