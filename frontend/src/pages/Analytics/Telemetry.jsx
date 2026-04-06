@@ -2,6 +2,9 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import { useState, useEffect } from 'react';
 import SpeedTrace from './SpeedTrace';
+import ThrottleGraph from './ThrottleGraph';
+import CircuitMap from './CircuitMap';
+import Loading from '../../components/Loading';
 
 const API_URL = 'http://localhost:8000/api';
 
@@ -60,92 +63,26 @@ function Telemetry() {
             Circuit map
           </h2>
           {!speedTraceData ? 
-            <p  className="text-gray-50 mb-8 text-center drop-shadow-[0px_0px_7px] drop-shadow-[#a0690ae6]">Loading...</p> : 
-         <Plot className="drop-shadow-[0px_0px_7px] 
-          drop-shadow-neutral-500 
-          rounded-lg"
-            data={[
-              {
-                x: speedTraceData.x,
-                y: speedTraceData.y,            
-                mode: "lines",
-                name: "Circuit Map",
-                line: {
-                  color: speedTraceData.colour,
-                  width: 6
-                }
-              },
-            ]}
-            layout={{
-              plot_bgcolor: "#262626",
-              paper_bgcolor: "#262626"
-            }}
-          />}
+            <Loading/>: 
+            <CircuitMap speedTraceData={speedTraceData} driver={driver}/>
+          }
 
         </div>
 
-        {/* Speed Trace Graph */}
-        <div className="
-          flex
-          flex-col 
-          items-center 
-          justify-center
-
-
-          ">
+        <div className="flex flex-col items-center justify-center">
           <h2 className="text-4xl font-bold text-gray-50 mb-8 text-center drop-shadow-[0px_0px_7px] drop-shadow-[#a0690ae6]">
             Telemetry
           </h2>          
           {!speedTraceData ? 
-            <p  className="text-gray-50 mb-8 text-center drop-shadow-[0px_0px_7px] drop-shadow-[#a0690ae6]">Loading...</p> :
+            <Loading/>:
             <SpeedTrace speedTraceData={speedTraceData} driver={driver}></SpeedTrace>
           }
 
           {/* Throttle % Graph*/}
           {!speedTraceData ? 
-          <p  className="text-gray-50 mb-8 text-center drop-shadow-[0px_0px_7px] drop-shadow-[#a0690ae6]">Loading...</p> : 
-          
-          <Plot className="drop-shadow-[0px_0px_7px] 
-          drop-shadow-neutral-500 
-          rounded-lg"
-            data={[
-              {
-                x: speedTraceData.distance,
-                y: speedTraceData.throttle,            
-                mode: "lines",
-                name: driver,
-                line: {
-                  color: speedTraceData.colour,
-                  width: 3
-                }
-              },
-            ]}
-            layout={{
-              title: {
-                text: "Throttle"
-              },          
-              xaxis: {
-                title: {
-                  text: "Distance (m)"
-                },
-                showgrid: false,
-                zeroline: true,
-                showline: true
-              },
-              yaxis: {
-                title: {
-                  text: "Throttle (%)"
-                },
-                showline: true
-              },
-              font: {
-                color: "#FFFFFF"
-              },
-              showlegend: true,
-              plot_bgcolor: "#262626",
-              paper_bgcolor: "#262626"
-            }}
-          />}
+            <Loading/>: 
+            <ThrottleGraph speedTraceData={speedTraceData} driver={driver}/>
+          }
         </div>      
       </div>
     </div>

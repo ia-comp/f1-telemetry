@@ -1,7 +1,6 @@
 import React from 'react'
 import { useState, useEffect, useRef } from 'react';
 import Plot from 'react-plotly.js';
-// import Plotly from 'plotly.js-dist-min';
 
 const SpeedTrace = ({ speedTraceData, driver }) => {
   const plotRef = useRef(null);
@@ -36,7 +35,7 @@ const SpeedTrace = ({ speedTraceData, driver }) => {
   const speedLine = {
     x: speedTraceData.distance,
     y: speedTraceData.speed,
-    mode: 'lines',
+    mode: "lines",
     name: driver,
     line: { 
       color: speedTraceData.colour, 
@@ -53,6 +52,7 @@ const SpeedTrace = ({ speedTraceData, driver }) => {
     name: 'Current Pos',
     showlegend: false
   };
+  
   return (
     <Plot className="drop-shadow-[0px_0px_7px] drop-shadow-neutral-500 rounded-lg"
       ref={plotRef}

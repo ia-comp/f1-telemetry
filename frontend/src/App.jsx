@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router'
 import HomePage from './pages/HomePage'
 import SessionResults from './pages/SessionResults'
-import Telemetry from './pages/Telemetry'
+import Telemetry from './pages/Analytics/Telemetry'
 
 function App() {
   return (
