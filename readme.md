@@ -16,8 +16,18 @@ Features:
   - race replay animation
   - throttle %
   - speed 
-- Full race replay
+- Full race replay:
+  - leaderboard section
+  - adjust replay speed
+  - click on a driver and they their current pace, throttle and position when you click on their name on the leaderboard
+  - also when clicking on the circle that represents a driver on track
+  - should add a place to show the position of pit entry (maybe crowd stands as well)
 
+Use Zustand for state control:
+- which session?
+- which year?
+- which event?
+- which driver? (for lap replay)
 Current problems:
 - each API call takes a long time to load and setup data (up to 1 minute)
 - currently uses local caching but thats not feasible for deployment
