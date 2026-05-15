@@ -1,12 +1,7 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useSessionStore,  SessionType } from "../store/sessionstore"
 
 const API_URL = "http://localhost:8000/api"
-
-interface Event {
-  name: string
-  round: number
-}
 
 interface SessionResult {
   Driver: string
@@ -18,7 +13,6 @@ const AVAILABLE_YEARS = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018]
 
 function SessionResults() {
   const [sessionResults, setSessionResults] = useState<SessionResult[]>([])
-  const [yearSchedule, setYearSchedule] = useState<Event[]>([])
   const [error, setError] = useState<string | null>(null)
 
   const {
@@ -26,6 +20,7 @@ function SessionResults() {
     eventId,
     sessionType,
     loading,
+    yearSchedule,
     setEventId,
     setSessionType,
     setLoading,
@@ -37,7 +32,9 @@ function SessionResults() {
     setError(null)
     try {
       const response = await fetch(`${API_URL}/session_results/${year}/${eventId}`)
-      if (!response.ok) throw new Error("Failed to fetch session data")
+      if (!response.ok) {
+        throw new Error("Failed to fetch session data")
+      }
       const data: SessionResult[] = await response.json()
       setSessionResults(data)
     } catch (e) {
@@ -46,6 +43,14 @@ function SessionResults() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    // If we arrived from the homepage and already have values
+    if (year > 0 && eventId !== "") {
+      fetchSessionResults();
+    }
+    // Empty dependency array means this only runs ONCE when the component loads
+  }, []);
 
   return (
     <div>
@@ -59,8 +64,8 @@ function SessionResults() {
         onChange={e => handleYearChange(Number(e.target.value))}
       >
         <option disabled value={0}>Select year</option>
-        {AVAILABLE_YEARS.map(yr => (
-          <option key={yr} value={yr}>{yr}</option>
+        {AVAILABLE_YEARS.map(year => (
+          <option key={year} value={year}>{year}</option>
         ))}
       </select>
 

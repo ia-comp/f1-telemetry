@@ -19,30 +19,19 @@ const SESSION_OPTIONS: { value: SessionType; label: string }[] = [
 
 function HomePage() {
   const navigate = useNavigate()
-  const [yearSchedule, setYearSchedule] = useState<Event[]>([])
-  const [scheduleLoading, setScheduleLoading] = useState(false)
+  // const [yearSchedule, setYearSchedule] = useState<Event[]>([])
+  // const [loading, setloading] = useState(false)
 
   const {
     year,
     eventId,
     sessionType,
+    yearSchedule,
+    loading,
     setEventId,
     setSessionType,
     handleYearChange,
   } = useSessionStore()
-
-  useEffect(() => {
-    if (!year) {
-      return
-    }
-    setScheduleLoading(true)
-    fetch(`${API_URL}/session_results/${year}`)
-      .then(r => r.json())
-      .then((data: Event[]) => setYearSchedule(data))
-      .catch(() => setYearSchedule([]))
-      .finally(() => setScheduleLoading(false))
-  }, [year])
-
 
   const canStart = year > 0 && eventId !== ""
 
@@ -104,10 +93,10 @@ function HomePage() {
                 className="select"
                 value={eventId}
                 onChange={e => setEventId(e.target.value)}
-                disabled={!year || scheduleLoading}
+                disabled={!year || loading}
               >
                 <option value="" disabled>
-                  {scheduleLoading ? "Loading events..." : "Select event"}
+                  {loading ? "Loading events..." : "Select event"}
                 </option>
                 {yearSchedule.map(event => (
                   <option key={event.name} value={event.name}>

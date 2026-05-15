@@ -4,7 +4,7 @@ const API_URL = "http://localhost:8000/api"
 
 type SessionType = "practice" | "qualifying" | "race"
 
-export interface Event {
+interface Event {
   name: string
   round: number
 }
@@ -34,32 +34,45 @@ const defaults = {
   error:        null,
 }
  
-const useSessionStore = create<SessionState>()((set) => ({
+const useSessionStore = create<SessionState>()((set, get) => ({
   ...defaults,
  
   setYear:        (year)        => set({ year }),
   setEventId:     (eventId)     => set({ eventId }),
   setSessionType: (sessionType) => set({ sessionType }),
   setLoading:     (loading)     => set({ loading }),
- 
-  handleYearChange: async (selectedYear) => {
-    set({ ...defaults, year: selectedYear, loading: true })
+  reset:          ()            => set(defaults),
+
+  handleYearChange: async (selectedYear: number) => {
+    const sanitizedYear = Math.floor(Number(selectedYear));
+    if (isNaN(sanitizedYear) || sanitizedYear <= 0) {
+      set({ error: "Invalid year selected", yearSchedule: [] });
+      return;
+    }
+    get().reset(); 
+    get().setYear(selectedYear);
+    get().setLoading(true);
+
     try {
-      const response = await fetch(`${API_URL}/session_results/${selectedYear}`)
-      if (!response.ok) throw new Error('Failed to fetch year schedule')
-      const data: Event[] = await response.json()
-      set({ yearSchedule: data, error: null })
+      const response = await fetch(`${API_URL}/session_results/${get().year}`);
+      
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: Failed to fetch schedule`);
+      }
+      // 2. Set the data and clear error
+      const data: Event[] = await response.json();
+      set({ yearSchedule: data, error: null });
     } catch (e) {
-      set({ error: (e as Error).message, yearSchedule: [] })
+      set({ error: (e as Error).message, yearSchedule: [] });
     } finally {
-      set({ loading: false })
+      get().setLoading(false);
     }
   },
  
-  reset: () => set(defaults),
-}))
+}));
 
 export {
   useSessionStore,
-  SessionType
+  SessionType,
+  Event
 }
