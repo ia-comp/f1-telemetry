@@ -1,4 +1,4 @@
-This project is inspired by the Fastlytics platform. 
+This project is inspired by the Fastlytics platform. Going to try and just vibe code this one to show I can use AI.
 
 Techstack:
 - Frontend: React + TypeScript, Plotly.js for charts.
@@ -28,6 +28,7 @@ Use Zustand for state control:
 - which year?
 - which event?
 - which driver? (for lap replay)
+
 Current problems:
 - each API call takes a long time to load and setup data (up to 1 minute)
 - currently uses local caching but thats not feasible for deployment
@@ -41,7 +42,7 @@ Backend:
 ```
 pip install -r requirements.txt
 ```
-FrontendL:
+Frontend:
 ```
 npm install
 ```
