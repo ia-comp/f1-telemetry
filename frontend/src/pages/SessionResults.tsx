@@ -26,27 +26,11 @@ function SessionResults() {
     eventId,
     sessionType,
     loading,
-    setYear,
     setEventId,
     setSessionType,
     setLoading,
-    reset,
+    handleYearChange,
   } = useSessionStore()
-
-  const handleYearChange = async (selectedYear: number) => {
-    reset()
-    setYear(selectedYear)
-    try {
-      const response = await fetch(`${API_URL}/session_results/${selectedYear}`)
-      if (!response.ok) throw new Error("Failed to fetch year schedule")
-      const data: Event[] = await response.json()
-      setYearSchedule(data)
-    } catch (e) {
-      setError((e as Error).message)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const fetchSessionResults = async () => {
     setLoading(true)
