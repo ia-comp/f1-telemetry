@@ -5,3 +5,15 @@ body, html, #root {
   background-color: #171717; /* neutral-900 */
   min-height: 100vh;
 }
+
+.select {
+  @apply w-full bg-[#1a1a1a] border border-white/10 text-gray-200 text-sm
+         rounded-lg appearance-none outline-none
+         focus:border-white/30 focus:ring-1 focus:ring-white/10
+         hover:border-white/20 transition-colors duration-150;
+}
+
+.select option {
+  background-color: #1a1a1a; /* A solid dark gray */
+  color: #e5e7eb;            /* text-gray-200 */
+}
