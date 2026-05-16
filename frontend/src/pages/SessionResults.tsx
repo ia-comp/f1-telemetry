@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useSessionStore,  SessionType } from "../store/sessionstore"
+import SessionBar from "../components/SessionBar"
 
 const API_URL = "http://localhost:8000/api"
 
@@ -9,8 +10,6 @@ interface SessionResult {
   LapTimeDelta: string | null
 }
 
-const AVAILABLE_YEARS = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018]
-
 function SessionResults() {
   const [sessionResults, setSessionResults] = useState<SessionResult[]>([])
   const [error, setError] = useState<string | null>(null)
@@ -18,13 +17,7 @@ function SessionResults() {
   const {
     year,
     eventId,
-    sessionType,
-    loading,
-    yearSchedule,
-    setEventId,
-    setSessionType,
     setLoading,
-    handleYearChange,
   } = useSessionStore()
 
   const fetchSessionResults = async () => {
@@ -49,7 +42,6 @@ function SessionResults() {
     if (year > 0 && eventId !== "") {
       fetchSessionResults();
     }
-    // Empty dependency array means this only runs ONCE when the component loads
   }, []);
 
   return (
@@ -57,52 +49,10 @@ function SessionResults() {
       <h1 className="text-4xl font-bold text-gray-50 mb-8 text-center">
         Session Results
       </h1>
-
-      <select
-        className="select"
-        value={year}
-        onChange={e => handleYearChange(Number(e.target.value))}
-      >
-        <option disabled value={0}>Select year</option>
-        {AVAILABLE_YEARS.map(year => (
-          <option key={year} value={year}>{year}</option>
-        ))}
-      </select>
-
-      <select
-        className="select"
-        value={eventId}
-        onChange={e => setEventId(e.target.value)}
-      >
-        <option disabled value="">Select event</option>
-        {yearSchedule.map(event => (
-          <option key={event.name} value={event.name}>
-            {event.round} - {event.name} Grand Prix
-          </option>
-        ))}
-      </select>
-
-      <select
-        className="select"
-        value={sessionType}
-        onChange={e => setSessionType(e.target.value as SessionType)}
-      >
-        <option value="practice">Practice</option>
-        <option value="qualifying">Qualifying</option>
-        <option value="race">Race</option>
-      </select>
-
+      <SessionBar loadFunction={fetchSessionResults}/>
       {error && (
         <p className="text-red-500 text-sm mt-2">{error}</p>
       )}
-
-      <button
-        onClick={fetchSessionResults}
-        disabled={loading || !eventId}
-        className="btn btn-primary"
-      >
-        {loading ? "Loading..." : "Load Results"}
-      </button>
 
       {sessionResults.length > 0 && (
         <div className="bg-white rounded-lg shadow-md overflow-hidden">

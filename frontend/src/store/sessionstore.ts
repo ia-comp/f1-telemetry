@@ -18,7 +18,7 @@ interface SessionState {
   error:        string | null
  
   setYear:           (year: number) => void
-  setEventId:        (id: string) => void
+  setEventId:        (eventId: string) => void
   setSessionType:    (type: SessionType) => void
   setLoading:        (loading: boolean) => void
   handleYearChange:  (selectedYear: number) => Promise<void>
