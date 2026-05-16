@@ -1,18 +1,9 @@
 import fastf1
 from fastf1.core import Session
 
-def get_session(year: int, gp: str, session_type: str) -> Session:
-    schedule = fastf1.get_event_schedule(year)
-
-    season_events = set()
-    for event in schedule.itertuples():
-        season_events.add(event.EventName.removesuffix(" Grand Prix"))
-        
-    if (gp not in season_events):
-        raise Exception("Invalid event selected")
-     
+def get_session(year: int, gp: int, session_type: str) -> Session:
     session = fastf1.get_session(year, gp, session_type)
-    if (not session):
+    if not session:
         raise Exception("Get session results - Internal server error")
- 
+    
     return session

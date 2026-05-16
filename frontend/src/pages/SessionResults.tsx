@@ -6,6 +6,7 @@ const API_URL = "http://localhost:8000/api"
 
 interface SessionResult {
   Driver: string
+  TeamColour: string
   LapTime: string | null
   LapTimeDelta: string | null
 }
@@ -39,7 +40,7 @@ function SessionResults() {
 
   useEffect(() => {
     // If we arrived from the homepage and already have values
-    if (year > 0 && eventId !== "") {
+    if (year > 0 && eventId > 0) {
       fetchSessionResults();
     }
   }, []);
@@ -55,25 +56,38 @@ function SessionResults() {
       )}
 
       {sessionResults.length > 0 && (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-800 text-white">
-                <tr>
-                  <th className="px-6 py-4 text-left">Driver</th>
-                  <th className="px-6 py-4 text-left">Lap Time</th>
-                  <th className="px-6 py-4 text-left">Delta</th>
+        <div className="w-full flex justify-center px-4">
+          <div className="w-full max-w-7xl">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="py-3 px-4 text-left text-[10px] tracking-widest uppercase text-gray-500 font-medium w-12">Pos</th>
+                  <th className="py-3 px-4 text-left text-[10px] tracking-widest uppercase text-gray-500 font-medium">Driver</th>
+                  <th className="py-3 px-4 text-right text-[10px] tracking-widest uppercase text-gray-500 font-medium">Fastest Lap</th>
+                  <th className="py-3 px-4 text-right text-[10px] tracking-widest uppercase text-gray-500 font-medium">Delta</th>
                 </tr>
               </thead>
               <tbody>
                 {sessionResults.map((result, index) => (
-                  <tr key={index}>
-                    <td className="px-6 py-4 font-bold text-lg">{result.Driver}</td>
-                    <td className="px-6 py-4 font-mono text-sm font-semibold">
-                      {result.LapTime ?? "-"}
+                  <tr
+                    key={index}
+                    className="border-b border-white/5 hover:bg-white/5 transition-colors duration-100"
+                  >
+                    <td className="py-3 px-4 text-gray-500 text-sm tabular-nums">{index + 1}</td>
+                    <td className="py-3 px-4">
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="h-4 w-4 rounded-full shrink-0"
+                          style={{ backgroundColor: `#${result.TeamColour}`, border: "bg-"}}
+                        />
+                        <span className="text-gray-50 font-bold tracking-wider">{result.Driver}</span>
+                      </div>
                     </td>
-                    <td className="px-6 py-4 font-mono text-sm text-red-600">
-                      {result.LapTimeDelta || "-"}
+                    <td className="py-3 px-4 text-right font-bold text-md text-gray-200 tabular-nums">
+                      {result.LapTime ?? '-'}
+                    </td>
+                    <td className="py-3 px-4 text-right font-bold text-md text-red-400 tabular-nums">
+                      {result.LapTimeDelta ? `+ ${result.LapTimeDelta}` : '-'}
                     </td>
                   </tr>
                 ))}
