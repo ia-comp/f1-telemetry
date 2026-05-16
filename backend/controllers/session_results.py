@@ -33,7 +33,7 @@ def get_qualifying_results(year: int, gp: int):
     session.load(laps=False, telemetry=False, weather=False, messages=False)
 
     # get the fastest lap for each driver
-    fastest_laps = session.results.sort_values('Position')    
+    fastest_laps = session.results
     fastest_laps['LapTime'] = fastest_laps.apply(
         lambda row: row['Q3'] if pd.notna(row['Q3']) 
                     else (row['Q2'] if pd.notna(row['Q2']) else row['Q1']),
@@ -44,9 +44,9 @@ def get_qualifying_results(year: int, gp: int):
     pole_lap = fastest_laps['Q3'].min()
     fastest_laps['LapTimeDelta'] = fastest_laps['LapTime'] - pole_lap
 
-    df = fastest_laps[['Abbreviation', 'LapTime', 'LapTimeDelta']].copy()
+    df = fastest_laps[['LastName', 'TeamColor', 'LapTime', 'LapTimeDelta']].copy()
     
-    df.columns = ['Driver', 'LapTime', 'LapTimeDelta']
+    df.columns = ['Driver', 'TeamColour', 'LapTime', 'LapTimeDelta']
     df['LapTime'] = df['LapTime'].apply(format_laptime)
     
     # Convert Timedelta to total seconds (float) so JSON can handle it
