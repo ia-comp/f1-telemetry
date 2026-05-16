@@ -29,6 +29,17 @@ Use Zustand for state control:
 - which event?
 - which driver? (for lap replay)
 
+System Design choices:
+Getting information for a particular event (race weekend/testing day):
+The snippet of code below in fastf1/events.py
+```
+  if round == 0:
+      raise ValueError("Cannot get testing event by round number!")
+```
+means it is not possible to obtain data for a particular preseason-testing day. This is because the fastF1 backend assigned all preseason-testing days with round number 0. I initially
+used the first word of the eventname eg. "Australian" from "Australian Grand Prix" to obtain the data. However, the fuzzy match algorithm is unreliable and fails to find the Event object for many valid race weekend names. 
+Passing a string in the HTTP Get request params also uses more data than passing a round number. Preseason testing data is also considered inaccurate since teams "sandbag" or limit the maximum performance of their cars. 
+Therefore, I chose to only analyse race weekends and get the Event objects using round umbe.r 
 Current problems:
 - each API call takes a long time to load and setup data (up to 1 minute)
 - currently uses local caching but thats not feasible for deployment
