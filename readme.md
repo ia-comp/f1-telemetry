@@ -29,8 +29,22 @@ Use Zustand for state control:
 - which event?
 - which driver? (for lap replay)
 
-System Design choices:
+
+
+## Installation 
+Backend:
+```
+pip install -r requirements.txt
+```
+Frontend:
+```
+npm install
+```
+
+## System Design choices:
+
 Getting information for a particular event (race weekend/testing day):
+
 The snippet of code below in fastf1/events.py
 ```
   if round == 0:
@@ -47,13 +61,3 @@ Current problems:
 - Need to learn how to stream data for race replay
 - Sync up the replay and laptime
 - Concurrency when updating multiple driver location on track, running position, status (eg. pit stop, DNF etc)
-
-## Installation 
-Backend:
-```
-pip install -r requirements.txt
-```
-Frontend:
-```
-npm install
-```
