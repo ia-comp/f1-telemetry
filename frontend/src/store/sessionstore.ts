@@ -11,14 +11,14 @@ interface Event {
  
 interface SessionState {
   year:         number
-  eventId:      string
+  eventId:      number
   sessionType:  SessionType
   loading:      boolean
   yearSchedule: Event[]
   error:        string | null
  
   setYear:           (year: number) => void
-  setEventId:        (eventId: string) => void
+  setEventId:        (eventId: number) => void
   setSessionType:    (type: SessionType) => void
   setLoading:        (loading: boolean) => void
   handleYearChange:  (selectedYear: number) => Promise<void>
@@ -27,7 +27,7 @@ interface SessionState {
  
 const defaults = {
   year:         0,
-  eventId:      '',
+  eventId:      0,
   sessionType:  'race' as SessionType,
   loading:      false,
   yearSchedule: [] as Event[],
@@ -37,18 +37,13 @@ const defaults = {
 const useSessionStore = create<SessionState>()((set, get) => ({
   ...defaults,
  
-  setYear:        (year)        => set({ year }),
+  setYear:        (year)        => set({ year: Math.floor(Number(year)) }),
   setEventId:     (eventId)     => set({ eventId }),
   setSessionType: (sessionType) => set({ sessionType }),
   setLoading:     (loading)     => set({ loading }),
   reset:          ()            => set(defaults),
 
   handleYearChange: async (selectedYear: number) => {
-    const sanitizedYear = Math.floor(Number(selectedYear));
-    if (isNaN(sanitizedYear) || sanitizedYear <= 0) {
-      set({ error: "Invalid year selected", yearSchedule: [] });
-      return;
-    }
     get().reset(); 
     get().setYear(selectedYear);
     get().setLoading(true);

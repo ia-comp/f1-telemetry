@@ -39,7 +39,7 @@ function SessionResults() {
 
   useEffect(() => {
     // If we arrived from the homepage and already have values
-    if (year > 0 && eventId !== "") {
+    if (year > 0 && eventId > 0) {
       fetchSessionResults();
     }
   }, []);

@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router"
 import { useSessionStore, SessionType } from "../store/sessionstore"
-
-const API_URL = "http://localhost:8000/api"
+import Loading from "../components/Loading"
 
 const AVAILABLE_YEARS = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018]
-
-interface Event {
-  name: string
-  round: number
-}
 
 const SESSION_OPTIONS: { value: SessionType; label: string }[] = [
   { value: "practice",   label: "Practice"   },
@@ -19,8 +13,6 @@ const SESSION_OPTIONS: { value: SessionType; label: string }[] = [
 
 function HomePage() {
   const navigate = useNavigate()
-  // const [yearSchedule, setYearSchedule] = useState<Event[]>([])
-  // const [loading, setloading] = useState(false)
 
   const {
     year,
@@ -33,7 +25,7 @@ function HomePage() {
     handleYearChange,
   } = useSessionStore()
 
-  const canStart = year > 0 && eventId !== ""
+  const canStart = year > 0 && eventId > 0
 
   return (
     <div className="flex h-screen bg-[#080808] overflow-hidden">
@@ -92,15 +84,15 @@ function HomePage() {
               <select
                 className="select"
                 value={eventId}
-                onChange={e => setEventId(e.target.value)}
+                onChange={e => setEventId(Number(e.target.value))}
                 disabled={!year || loading}
               >
-                <option value="" disabled>
+                <option value={0} disabled>
                   {loading ? "Loading events..." : "Select event"}
                 </option>
                 {yearSchedule.map(event => (
-                  <option key={event.name} value={event.name}>
-                    {event.round} - {event.name} {event.round > 0 ? "Grand Prix" : ""}
+                  <option key={event.round} value={event.round}>
+                    Round {event.round} - {event.name} Grand Prix
                   </option>
                 ))}
               </select>
@@ -136,7 +128,7 @@ function HomePage() {
               boxShadow: canStart ? "0 0 24px #e8000d55, 0 0 6px #e8000d33" : "none",
             }}
           >
-            Get started
+            {loading ? <Loading />: "Get started"}
           </button>
 
         </div>
