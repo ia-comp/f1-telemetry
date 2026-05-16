@@ -12,9 +12,9 @@ class Test_Get_Schedule:
     def test_valid_year(self):
         response = client.get("/api/session_results/2023")
         assert response.status_code == 200
-        assert len(response.json()) == 23
-        assert response.json()[7] == {'round': 7, 'name': 'Spanish'}
-        assert response.json()[20] == {'round': 20, 'name': 'São Paulo'}
+        assert len(response.json()) == 22
+        assert response.json()[6] == {'round': 7, 'name': 'Spanish'}
+        assert response.json()[19] == {'round': 20, 'name': 'São Paulo'}
 
     def test_invalid_early_year(self):
         response = client.get(f"/api/session_results/{settings.EARLIEST_YEAR - 1}")
@@ -28,7 +28,8 @@ class Test_Get_Schedule:
 
 class Test_Get_Session_Results:
     def test_valid_race(self):
-        response = client.get("/api/session_results/2023/Spanish")
+        # Get results for Spansih GP (round 7)
+        response = client.get("/api/session_results/2023/7")
         assert response.status_code == 200
         assert len(response.json()) == 20
         assert response.json()[0] == {'Driver': 'VER', 'LapTime': '1:12.272', 'LapTimeDelta': 0.0}

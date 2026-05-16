@@ -24,7 +24,7 @@ async def fetch_driver_speed_trace(year: int, gp: str, driver: str):
         raise HTTPException(status_code=400, detail=str(e))
 
 @router.get("/session_results/{year}/{gp}")
-async def fetch_qualifying_results(year: int, gp: str):
+async def fetch_qualifying_results(year: int, gp: int):
     validate_year(year)
 
     if (not gp):

@@ -17,7 +17,7 @@ def format_laptime(td):
 
 # This function returns all races scheduled for a given year
 def get_year_schedule(year: int):
-    schedule = fastf1.get_event_schedule(year)
+    schedule = fastf1.get_event_schedule(year, include_testing=False)
 
     # # get race names and round number
     list_races = list()
@@ -28,7 +28,7 @@ def get_year_schedule(year: int):
         }) 
     return list_races
 
-def get_qualifying_results(year: int, gp: str):
+def get_qualifying_results(year: int, gp: int):
     session = get_session(year, gp, session_type="Q")
     session.load(laps=False, telemetry=False, weather=False, messages=False)
 
