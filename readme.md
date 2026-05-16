@@ -54,10 +54,13 @@ means it is not possible to obtain data for a particular preseason-testing day u
 used the first word of the eventname eg. "Australian" from "Australian Grand Prix" to obtain the data. However, I found the fuzzy match algorithm to be unreliable since it failed to find the Event object for many valid race weekend names. 
 Passing a string in the HTTP Get request params also uses more data than passing a round number. Preseason testing data is also considered inaccurate since teams "sandbag" or limit the maximum performance of their cars. 
 Therefore, I chose to only analyse race weekends and get the Event objects using round number.
-Current problems:
+## Current problems:
 - each API call takes a long time to load and setup data (up to 1 minute)
 - currently uses local caching but thats not feasible for deployment
 - Fastlytics uses supabase to cache --> reduce api calls
 - Need to learn how to stream data for race replay
 - Sync up the replay and laptime
 - Concurrency when updating multiple driver location on track, running position, status (eg. pit stop, DNF etc)
+
+## Bugs out of my control:
+- qualifying results for round 15 2021 returns an "Internal Server Error"
