@@ -1,8 +1,14 @@
 This project is inspired by the Fastlytics platform. Going to try and just vibe code this one to show I can use AI.
 
-Techstack:
+**Techstack:**
 - Frontend: React + TypeScript, Plotly.js for charts.
 - Backend: Python (FastF1 API + FastAPI framework)
+- Linking frontend with backend: axios
+Use Zustand for state control:
+- which session?
+- which year?
+- which event?
+- which driver? (for lap/race replay)
 
 ## Installation 
 Backend:
@@ -15,6 +21,10 @@ npm install
 ```
 
 ## Running  
+**DISCLAIMER: **
+- only results for Qualifying works
+- Telemetry page needs a lot of work (proper playback etc)
+- The entire thing is very much in its early stages 
 Backend:
 ```
 cd backend
@@ -27,7 +37,7 @@ npm run dev
 ```
 
 
-Planned Features:
+## Planned Features:
 
 - session results (driver positions + laptimes)
   - qualifying
@@ -48,11 +58,7 @@ Planned Features:
   - also when clicking on the circle that represents a driver on track
   - should add a place to show the position of pit entry (maybe crowd stands as well)
 
-Use Zustand for state control:
-- which session?
-- which year?
-- which event?
-- which driver? (for lap/race replay)
+
 
 ## Design choices:
 
