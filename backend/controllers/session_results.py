@@ -13,7 +13,7 @@ def format_laptime(td):
     if pd.notna(td):
         secs = td.total_seconds()
         return f"{int(secs // 60)}:{int(secs % 60):02d}.{int((secs % 1) * 1000):03d}"
-    return None
+    return "No time"
 
 # This function returns all races scheduled for a given year
 def get_year_schedule(year: int):
@@ -51,15 +51,16 @@ def get_qualifying_results(year: int, gp: int):
     
     # Convert Timedelta to total seconds (float) so JSON can handle it
     df['LapTimeDelta'] = df['LapTimeDelta'].dt.total_seconds()
-    
+    df['LapTimeDelta'] = df['LapTimeDelta'].fillna(0.0)
+
     return df.to_dict('records')
 
 # The functions below are used to display telemetry information
-def plot_speed_trace(year: int, gp: str, driver: str):
+def plot_speed_trace(year: int, gp: int, driver: str):
     session = get_session(year, gp, session_type="Q")
     session.load(weather=False, messages=False)
     
-    fastest_lap = session.laps.pick_driver(driver).pick_fastest()  # Singular
+    fastest_lap = session.laps.pick_driver(driver).pick_fastest()
     
     # Get telemetry (combines car_data and pos_data)
     telemetry = fastest_lap.get_telemetry()

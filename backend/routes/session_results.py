@@ -8,7 +8,7 @@ from backend.exceptions import validate_year
 router = APIRouter()
 
 @router.get("/session_results/telemetry/speed_trace/{year}/{gp}/{driver}")
-async def fetch_driver_speed_trace(year: int, gp: str, driver: str):
+async def fetch_driver_speed_trace(year: int, gp: int, driver: str):
     validate_year(year)
 
     if (not gp):
@@ -32,6 +32,7 @@ async def fetch_qualifying_results(year: int, gp: int):
     
     try:
         data = get_qualifying_results(year, gp)
+        print(data)
         return data
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
