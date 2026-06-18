@@ -13,22 +13,25 @@ interface SessionState {
   year:         number
   eventId:      number
   sessionType:  SessionType
-  loading:      boolean
+  driver:       string
   yearSchedule: Event[]
+  loading:      boolean
   error:        string | null
  
   setYear:           (year: number) => void
   setEventId:        (eventId: number) => void
+  setDriver:         (driver: string) => void
   setSessionType:    (type: SessionType) => void
-  setLoading:        (loading: boolean) => void
   handleYearChange:  (selectedYear: number) => Promise<void>
+  setLoading:        (loading: boolean) => void
   reset:             () => void
 }
  
 const defaults = {
   year:         0,
   eventId:      0,
-  sessionType:  'race' as SessionType,
+  driver:       "HAM",
+  sessionType:  "race" as SessionType,
   loading:      false,
   yearSchedule: [] as Event[],
   error:        null,
@@ -39,6 +42,7 @@ const useSessionStore = create<SessionState>()((set, get) => ({
  
   setYear:        (year)        => set({ year: Math.floor(Number(year)) }),
   setEventId:     (eventId)     => set({ eventId }),
+  setDriver:     (driver)     => set({ driver }),
   setSessionType: (sessionType) => set({ sessionType }),
   setLoading:     (loading)     => set({ loading }),
   reset:          ()            => set(defaults),

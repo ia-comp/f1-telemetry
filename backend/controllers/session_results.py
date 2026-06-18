@@ -61,7 +61,7 @@ def plot_speed_trace(year: int, gp: int, driver: str):
     session.load(weather=False, messages=False)
     
     fastest_lap = session.laps.pick_driver(driver).pick_fastest()
-    
+    laptime = fastest_lap[['LapTime']].copy().apply(format_laptime)
     # Get telemetry (combines car_data and pos_data)
     telemetry = fastest_lap.get_telemetry()
     
@@ -74,6 +74,7 @@ def plot_speed_trace(year: int, gp: int, driver: str):
     )
     
     return {
+        "LapTime": laptime['LapTime'],
         "colour": team_color,
         "distance": telemetry['Distance'].tolist(),
         "speed": telemetry['Speed'].tolist(),

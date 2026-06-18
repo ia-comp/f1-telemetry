@@ -54,7 +54,7 @@ const ThrottleGraph = ({ speedTraceData, driver }) => {
   };
 
   return (
-    <Plot className="drop-shadow-[0px_0px_7px] drop-shadow-neutral-500 rounded-lg"
+    <Plot className=" drop-shadow-[0px_0px_7px] drop-shadow-neutral-500 rounded-lg"
       ref={plotRef}  
       data={[throttleLine, animatedMarker]}
         layout={{
