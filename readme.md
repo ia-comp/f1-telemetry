@@ -79,7 +79,3 @@ Therefore, I chose to only analyse race weekends and get the Event objects using
 - Need to learn how to stream data for race replay
 - Sync up the replay and laptime
 - Concurrency when updating multiple driver location on track, running position, status (eg. pit stop, DNF etc)
-
-## Bugs out of my control:
-- qualifying results for round 15 2021 returns an "Internal Server Error"
-- qualifying results for round 7 2024 returns an "Internal Server Error"
